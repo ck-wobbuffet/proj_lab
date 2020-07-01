@@ -1,0 +1,70 @@
+<!-- home hot data -->
+<!-- hot data -->
+<div class="hot-data">
+    <div class="row">
+        <!-- today hot bolg -->
+        <div class='col-md-4'>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Today Top</h4>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for hot in today_hot %}
+                        <li>
+                            <a href="{% url 'article_details' hot.content_object.pk %}">{{ hot.content_object.title}}
+                                ({{hot.read_num}})</a>
+                        </li>
+                        {% empty %}
+                        <li>No Views today!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END today hot bolg -->
+        <!-- yesterday hot bolg -->
+        <div class='col-md-4'>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Yesterday Top</h4>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for hot in yesterday_hot %}
+                        <li>
+                            <a href="{% url 'article_details' hot.content_object.pk %}">{{ hot.content_object.title}}
+                                ({{hot.read_num}})</a>
+                        </li>
+                        {% empty %}
+                        <li>No Views yesterday!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END yesterday hot bolg -->
+        <!-- week hot bolg -->
+        <div class='col-md-4'>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Week Top</h4>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for hot in week_hot %}
+                        <li>
+                            <a href="{% url 'article_details' hot.id %}">{{ hot.title}}
+                                ({{hot.read_num_sum}})</a>
+                        </li>
+                        {% empty %}
+                        <li>No Views in last week!</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- END week hot blog -->
+    </div>
+</div>
+<!-- END hot -->

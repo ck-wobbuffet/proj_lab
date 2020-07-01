@@ -1,0 +1,10 @@
+<!-- coding=utf8 -->
+{% extends 'articles_list.html' %}
+<!--title -->
+{% load static%}
+{% block title %}
+{{article_type.type_name}}
+{% endblock %}
+{% block article_list_title %}
+    {{ article_with_date }} | {{ page_of_articles.paginator.count }} Blogs <a href="{% url 'articles_list' %}"></a>
+{% endblock %}

@@ -1,0 +1,465 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block title %}
+    S2AC|HOME
+{% endblock %}
+
+<!-- {% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %} -->
+
+{% block nav_home_active %}
+    active
+{% endblock %}
+    
+{% block content %} 
+       
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="d-flex align-items-center justify-content-center">
+        <div class="container position-relative">
+            <h1>Welcome to S<sup>2</sup>AC Lab</h1>
+            <h2>...Smart Sensing and Affective Computing Lab...</h2>
+            <a href="#about" class="btn-get-started scrollto">Get Started</a>
+        </div>
+    </section><!-- End Hero -->
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about section-bg">
+        <div class="container">
+    
+            <div class="row">
+                <div class="col-lg-6">
+                    <img src="static/assets/img/about.png" class="img-fluid" alt="">
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0">
+                    <h3>About us</h3>
+                    <p>
+                        The ever accelerating process of urbanization enables modern people to live conveniently in a fully-connected world,
+                        urging for rich and real-time physiological and psychological healthcare services. To this end, Smart Sensing and
+                        Affective Computing (S2AC) lab aims to integrate promising tools from diversified fields like Signal Processing (SP),
+                        Artificial Intelligence (AI), Machine Learning (ML) and Hardware Design (HD) to develop innovative technologies and
+                        systems for smart ambient sensing and context understanding with a focus on pervasive computing and affective computing.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <i class="bx bxs-network-chart"></i>
+                            <h4>Smart Sensing</h4>
+                            <p>Motion recognition based on off-the-shelf Wi-Fi</p>
+                        </div>
+                        <div class="col-md-6">
+                            <i class="bx bx-happy"></i>
+                            <h4>Affective Computing</h4>
+                            <p>Visual based affective computing<br>
+                                Radio-Frequency based affective computing
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts section">
+        <div class="container">
+    
+            <div class="row counters">
+    
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">32</span>
+                    <p>Papers</p>
+                </div>
+    
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">11</span>
+                    <p>Awards</p>
+                </div>
+    
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">11</span>
+                    <p>Project Grants</p>
+                </div>
+    
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">15</span>
+                    <p>Research Fellow</p>
+                </div>
+    
+            </div>
+    
+        </div>
+    </section><!-- End Counts Section -->
+
+    <!-- ======= hot data Section ======= -->
+    <section id="hot-data" class="hot-data center-block">
+        <div class="container">
+            <div class="section-title">
+                <h2>POPULAR POSTS</h2>
+                <p></p>
+            </div> 
+            <div class="row">
+                <div class="col-xs-6 col-sm-4" >
+                    <div class="box" >
+                        <h3>Today Tops</h3>
+                        <ul>
+                            {% for hot in today_hot %}
+                            <li>
+                                <a href="{% url 'article_details' hot.content_object.pk %}">{{ hot.content_object.title|striptags|truncatechars:30}} ({{hot.read_num}})</a>
+                            </li>
+                            {% empty %}
+                            <li class="na">No Views today!</li>
+                            {% endfor %}
+                        </ul>   
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <div class="box featured">
+                        <h3>Week Tops</h3>
+                        <!-- <h4><sup>$</sup>19<span> / month</span></h4> -->
+                        <ul>
+                            {% for hot in week_hot %}
+                            <li>
+                                <a href="{% url 'article_details' hot.id %}">{{ hot.title|striptags|truncatechars:30}}
+                                ({{hot.read_num_sum}})
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li class="na">No Views in last week!</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <div class="box">
+                        <!-- <span class="advanced">Advanced</span> -->
+                        <h3>Yesterday Tops</h3>
+                        <ul>
+                            {% for hot in yesterday_hot %}
+                            <li>
+                                <a href="{% url 'article_details' hot.content_object.pk %}">{{ hot.content_object.title |striptags|truncatechars:30}}
+                                    ({{hot.read_num}})</a>
+                            </li>
+                            {% empty %}
+                            <li class="na">No Views yesterday!</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>  
+            </div>
+            <div id="area-chart" style="width:auto; height: 360px; padding: 0 100px;">
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+                <!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script> -->
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+                <script type="text/javascript">
+                    var dom = document.getElementById("area-chart");
+                    var myChart = echarts.init(dom);
+                    var app = {};
+                    option = null;
+                    option = {
+                        title: {
+                            subtext: 'Views in last week',
+                            left: 'center',
+                            bottom: 'top',
+                            color: '#0eb0c9',
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+
+                                    backgroundColor: '#ffc107'
+                                }
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: {{ dates | safe }}
+                                },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name: 'daily visits',
+                        data: {{ read_sum| safe }},
+                        type: 'line',
+                        lineStyle: {
+                        color: '#444444'
+                    },
+                        areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 0.9, [{
+                            offset: 0,
+                            color: '#374055'
+                        }, {
+                            offset: 1,
+                            color: '#374055'
+                        }])
+                    },
+                                }]
+                            };
+                    ;
+                    if (option && typeof option === "object") {
+                        myChart.setOption(option, true);
+                    }
+                    
+                </script>
+            </div>
+        </div>
+        
+    </section>
+    <!-- End Hot-data Section -->
+
+    <!-- ======= team Section ======= -->
+    <section id="team" class="testimonials">
+        <div class="container">
+    
+            <div class="section-title">
+                <h2>Lab Members</h2>
+                <p>Now we have one professor in our team, and there are 3 PhD students  and 11 master's students.</p>
+            </div>
+    
+            <div class="owl-carousel testimonials-carousel">
+    
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/zx.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Xiang Zhang</h3>
+                    
+                    <h4>PhD, Grade 2019</h4>
+                </div>
+    
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/yh.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Huan Yan</h3>
+                    <h4>PhD, Grade 2019</h4>
+                </div>
+    
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/wyt.jpg" class="testimonial-img" alt="">
+                    <h3>Ms.Yantong Wang</h3>
+                    <h4>PhD, Grade 2020</h4>
+                </div>
+    
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field: motion recognition based on Wi-Fi.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/mm.jpg" class="testimonial-img" alt="">
+                    <h3>Ms.Mengmeng Huang</h3>
+                    <h4>Master, Grade 2017</h4>
+                </div>
+    
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/jialeyuan.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Leyuan Jia</h3>
+                    <h4>Master, Grade 2018</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/ck.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Ken Cheng</h3>
+                    <h4>Master, Grade 2018</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/fy.jpg" class="testimonial-img" alt="">
+                    <h3>Ms.Yue Fu</h3>
+                    <h4>Master, Grade 2018</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field: motion recognition based on Wi-Fi.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/ysl.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Shulin Yang</h3>
+                    <h4>Master, Grade 2018</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field: motion recognition based on Wi-Fi.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/yxx.png" class="testimonial-img" alt="">
+                    <h3>Ms.Xiaoxiao Yu</h3>
+                    <h4>Master, Grade 2018</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field: motion recognition based on Wi-Fi.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/lili.png" class="testimonial-img" alt="">
+                    <h3>Ms.Lili Gebru Gebremar</h3>
+                    <h4>Master, Grade 2018(Ethiopia)</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/zyn.jpg" class="testimonial-img" alt="">
+                    <h3>Ms.Yanan zhu</h3>
+                    <h4>Master, Grade 2019</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/wc.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Chun Wu</h3>
+                    <h4>Master, Grade 2017</h4>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>
+                        <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        Research field 1: motion recognition based on Wi-Fi.<br>
+                        Research field 2: affective computing.
+                        <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/assets/img/testimonials/lja.jpg" class="testimonial-img" alt="">
+                    <h3>Mr.Jiangan Li</h3>
+                    <h4>Master, Grade 2017</h4>
+                </div>
+    
+            </div>
+    
+        </div>
+    </section><!-- End Testimonials Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+        <div class="container">
+    
+            <div class="section-title">
+                <h2>Contact</h2>
+                <p>If you have any questions or are interested in our research, please contact us. 
+                    <br>And if you would like to jion our teem to study together, please contact us and let us make progress together!</p>
+            </div>
+    
+            <div class="row">
+    
+                <div class="col-lg-6">
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="info-box">
+                                <i class="bx bx-map"></i>
+                                <h3>Our Address</h3>
+                                <p>A808, Science and Education Building, 420 Fei Cui Road, Shushan District, Hefei, Anhui Province, China</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box mt-4">
+                                <i class="bx bx-envelope"></i>
+                                <h3>Email</h3>
+                                <p>ssac.hfut@gmail.com<br>chgken@hfut.edu.cn</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box mt-4">
+                                <i class="bx bxs-institution"></i>
+                                <h3>School</h3>
+                                <p>School of Computer and Information<br>Hefei University of Technology</p>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+    
+                <div class="col-lg-6">
+                    <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                        <div class="form-row">
+                            <div class="col-md-6 form-group">
+                                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
+                                    data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                                <div class="validate"></div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
+                                    data-rule="email" data-msg="Please enter a valid email" />
+                                <div class="validate"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
+                                data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                            <div class="validate"></div>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="message" rows="5" data-rule="required"
+                                data-msg="Please write something for us" placeholder="Message"></textarea>
+                            <div class="validate"></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="loading">Loading</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Your message has been sent. Thank you!</div>
+                        </div>
+                        <div class="text-center"><button type="submit">Send Message</button></div>
+                    </form>
+                </div>
+    
+            </div>
+    
+        </div>
+    </section><!-- End Contact Section -->
+
+{% endblock %}

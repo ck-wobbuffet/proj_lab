@@ -1,0 +1,227 @@
+
+{% extends 'base.html' %}
+<!--title -->
+{% block title %}
+    {{article.title}}
+{% endblock %}
+{% load static %}
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 's2aclab/article_type.css' %}">
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+<!-- content-->
+{% block content %}
+<!-- ======= Hero-other Section ======= -->
+<section id="hero-other" class="d-flex align-items-center justify-content-center">
+    <div class="container position-relative">
+        <h1>Welcome to S<sup>2</sup>AC Lab</h1>
+        <h2>...Smart Sensing and Affective Computing Lab...</h2>
+        <a href="#article-section" class="btn-get-started scrollto">Get Started</a>
+    </div>
+</section>
+<!-- End Hero-other -->
+
+
+    <div class="container">
+        <section id="article-section">
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1">
+                    <div class="page-header">
+                        <h1>{{article.title}} </h1>
+                    </div>
+                    <ul class='article_info_description'>
+                        <li>Posted by {{ article.author }}</li>
+                        <li>at: {{ article.created_time| date:"Y-m-d H:i:s"}}</li>
+                        <li class="text-right">&nbsp;Views: ({{ article.get_read_num }}) </li>
+                        <li class=' pull-right'>Category:<a href="{% url 'article_with_type' article.article_type.pk %}">{{ article.article_type }}</a></li>
+                    </ul>
+                    <p class='article_content'>{{ article.content|safe }}</p>
+                    <!-- 前后翻页 -->
+                    <nav aria-label="...">
+                        <ul class="pager" style="list-style-type: none;">
+                            {%if previous_article %}
+                            <li class="previous"><a href="{% url 'article_details' previous_article.pk %}"><span aria-hidden="true">&larr;</span>Previous</a></li>
+                            {% else %}
+        
+                            {% endif %}
+                            {% if next_article %}
+                            <li class="next"><a href="{% url 'article_details' next_article.pk %}">Next <span aria-hidden="true">&rarr;</span></a></li>
+                            {% else %}
+                            
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    <!-- END 前后翻页 -->
+                </div>
+            </div>
+        </section>
+        <section id="comment-section">
+            <div class="row">
+                <div class="col-xs-10 col-xs-offset-1">
+                    <div class="panel panel-default">
+                        <!-- comments enter  -->
+                        <div class="panel-heading">
+                            <h4>Comments</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="comment-area">
+                                {% if user.is_authenticated %}
+                                <!-- 登录了 -->
+                                <form id="comment_form" action="{% url 'update_comment' %}" method="POST" style="overflow: hidden;">
+                                    {% csrf_token %}
+                                    <label for="comment_text">Commenting publicly&nbsp;as&nbsp;{{ user.username }}</label>
+                                    <div id='reply_content_container' style="display: none;">
+                                        
+                                        <p>Reply: </p>
+                                            <div id="reply_content"></div>
+                                    </div>
+                                    {{comment_form}}
+                                    <!-- {% for field in comment_form%}
+                                    {{ field }}
+                                    {% endfor %} -->
+                                    <span id="comment_error" class="text-danger pull-left"></span>
+                                    <input type="submit" value="comment" class="btn btn-info pull-right">
+
+                                </form>
+                                {%else%}
+                                    <!-- 未登录 -->
+                                    <a style="color:darkblue" href="{% url 'login' %}?from={{ request.get_full_path }}">Sign in</a>&nbsp;to post your comments
+                                    <span>or</span>
+                                    <a style="color:firebrick" href="{% url 'register' %}?from={{ request.get_full_path }}">Register</a>.
+                                {%endif %}
+                            </div>
+                        </div>
+                        <!-- END comments enter  -->
+                        <!-- comment list -->
+                        <div class="comment-area">
+                            
+                                <div id="comment_list">
+                                    <!-- <li id="comment_list" class="list-group-item" style="color:steelblue"></li> -->
+                                    {% for comment in comments %}
+                                        <div  id="root_{{ comment.pk }}" class="comment">
+                                            <span>{{ comment.user.username }}</span>
+                                            <span>{{ comment.comment_time|date:"Y-m-d H:i:s"}}</span>
+                                            
+                                            <a href="javascript:reply({{ comment.pk}})" style="color:steelblue;font-size: 14px;">reply</a>
+                                            <div id='comment_{{comment.pk}}'>
+                                                {{ comment.text|safe }}
+                                                
+                                            </div>
+                                            
+                                            
+                                            <!-- 搁置以后弄 2020-06-13 -->
+                                            <div class='reply' >
+                                                {% for reply in comment.root_comment.all %}
+                                                    <span>{{ reply.user.username }}</span>
+                                                    <span>{{ reply.comment_time|date:"Y-m-d H:i:s"}}</span>
+                                                    <a href="javascript:reply({{ reply.pk}})" style="color:steelblue;font-size: 14px;">reply</a>
+                                                    <div id='comment_{{reply.pk}}'>
+                                                        {{ reply.text|safe }}
+                                                        
+                                                    </div> 
+                                                    
+                                                {%endfor%}
+                                            </div> 
+                                            <!-- 搁置以后弄 2020-06-13 -->
+                                        </div>
+                                    {%empty%}
+                                        <span id="no_comment">Leave your comments！</span>
+                                            
+                                    {% endfor %}
+                                </div>
+                            
+                        </div>
+                        <!-- END comment list -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+        {% endblock %}
+<!-- END content -->
+
+{% block script_extends%}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    <script type="text/javascript">
+        $("#comment_form").submit(function(){
+
+            // 判断是否输入为空，若空直接ban下面代码，减少空评论提交对服务器的请求
+            // 错误信息置空
+            $("#comment_error").text("");
+            if(CKEDITOR.instances['id_text'].document.getBody().getText().trim()==""){
+                 // 显示错误信息
+                $("#comment_error").text("Comment can't be empty! ");
+                return false;
+            }
+            // 更新数据到textarea
+            CKEDITOR.instances['id_text'].updateElement();
+            // 异步提交 ajax
+            $.ajax({
+                url: "{% url 'update_comment' %}",
+                type: "POST",
+                data: $(this).serialize(),
+                cache: false,
+                success:function(data){
+                    console.log(data);
+                    if (data['status'] == 'SUCCESS'){
+                        if($("#reply_comment_id").val()=='0'){
+                            // 动态刷新插入评论
+                            var comment_html = '<div id="root_' + data['pk'] + '" class="comment"><span>' + data['username'] + '</span><span> (' + data['comment_time'] + ')：</span><div id="comment_' + data['pk'] + '">' + data['text'] + '</div><a href="javascript:reply(' + data['pk'] + ');">reply</a></div>';
+                            $("#comment_list").prepend(comment_html);
+                        }else{
+                            // 插入回复
+                           var reply_html = '<div class="reply"><span>' + data['username'] + '</span><span> (' + data['comment_time'] + ')</span>'+'<span> reply </span>'+'<span>' + data['reply_to'] + '：</span><div id="comment_' + data['pk'] + '">' + data['text'] + '</div><a href="javascript:reply(' + data['pk'] + ');">reply</a></div>';
+                           $("#root_" + data['root_pk']).append(reply_html); 
+                        }
+                        
+                        
+                        // 清空编辑框的内容
+                        CKEDITOR.instances['id_text'].setData('');
+                        $('#reply_content_container').hide();
+                        $('#reply_comment_id').val('0');
+                        $('#no_comment').remove();
+                        $("#comment_error").text('Comment successfully!');
+                    }else{
+                        // 显示错误信息
+                        $("#comment_error").text(data['message']);
+                    }
+                   
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                },
+            });
+            return false;
+        });
+        // 搁置以后弄 2020-06-13
+        function reply(reply_comment_id){
+            // 设置值
+            $('#reply_comment_id').val(reply_comment_id);
+            var html = $("#comment_" + reply_comment_id).html();
+            $('#reply_content').html(html);
+            $('#reply_content_container').show();
+
+            $('html').animate({scrollTop:$('#comment_form').offset().top-60},300,
+            function(){
+                CKEDITOR.instances['id_text'].focus();
+            }); 
+        }
+            // 300ms
+        function numFormat(num){
+            return ('00' + num).substr(-2);
+        }
+        function timeFormat(timestamp){
+            var datetime = new Date(timestamp*1000);
+            var year = datetime.getFullYear();
+            var month = numFormat(datetime.getMonth() + 1);
+            var day = numFormat(datetime.getDate());
+            var hour = numFormat(datetime.getHours());
+            var minute = numFormat(datetime.getMinutes());
+            var second = numFormat(datetime.getSeconds());
+                return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+        }
+        
+    </script>
+{% endblock %}

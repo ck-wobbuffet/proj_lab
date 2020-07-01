@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block title %}
+S2AC|REGISTER
+{% endblock %}
+
+{% block header_extends %}
+<link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block nav_home_active %}
+active
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Register</h3>
+        </div>
+        <div class="panel-body" >
+            <form action="" method="POST">
+                {% csrf_token %}
+                <!-- {{ register_form }} -->
+                {% for field in register_form %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                <p class="text-danger">{{ field.errors.as_text }}</p>
+                {% endfor %}
+                <span class="pull-left text-danger">{{ register_form.non_field_errors }}</span>
+                <input type="submit" value="Sign Up" class="btn btn-danger pull-right">
+            </form>
+        </div>
+    </div>
+</div>
+
+    
+{% endblock %}

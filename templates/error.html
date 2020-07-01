@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block title %}
+S2AC|LOGIN ERROR
+{% endblock %}
+
+{% block header_extends %}
+<link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block nav_home_active %}
+active
+{% endblock %}
+
+{% block content %}
+    {{ message }} <a href="{{ redirect_to }}">Back</a>
+{% endblock %}

@@ -1,0 +1,135 @@
+<!-- coding=gbk -->
+<!-- home -->
+{% extends 'base.html' %}
+{% load static %}
+<!-- title -->
+{% block title %}lab site{% endblock%}
+{% block nav_articles_active %}active{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 's2aclab/article_type.css' %}">
+{% endblock %}
+<!-- END title -->
+<!-- content -->
+{% block content %}
+
+<!-- ======= Hero-other Section ======= -->
+<section id="hero-other" class="d-flex align-items-center justify-content-center" >
+    <div class="container position-relative">
+        <h1>Welcome to S<sup>2</sup>AC Lab</h1>
+        <h2>...Smart Sensing and Affective Computing Lab...</h2>
+        <a href="#article-list-section" class="btn-get-started scrollto">Get Started</a>
+    </div>
+</section>
+<!-- End Hero-other -->
+
+<!-- ======= ARTICLE LIST Section ======= -->
+<section id="article-list-section">
+    <div class="container-fluid">
+        <div class="row">
+        
+            <div class="col-xs-12 col-sm-6 col-md-8">
+                <!-- 文章list -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {% block article_list_title %}Blog List | {{ page_of_articles.paginator.count }} blogs{% endblock %}
+                    </div>
+                    <div class="panel-body">
+                        {% for article in page_of_articles.object_list %}
+                            <div class="article">                              
+                                <h3 id="title"><a href="{% url 'article_details' article.pk %}">{{ article.title }}</a></h3>  
+                                <p class="article_info">
+                                    <a href="{% url 'article_with_type' article.article_type.pk %}">{{article.article_type}}</a>
+                                    | {{ article.created_time| date:"Y-m-d H:i:s"}} | Views: ({{ article.get_read_num }})
+                                </p> 
+                                <h3 id='bd'>{{ article.content|striptags|truncatechars:65 }}</h3>
+                            </div>
+                        {% empty %}
+                            <div class="article">
+                                <h3>--No more--</h3> 
+                            </div>                        
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- END 文章list -->
+                <!-- 页码 -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li>
+                            {% if page_of_articles.has_previous %}
+                                <a href="?page={{ page_of_articles.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            {% else %}
+                                <span aria-hidden="true">&laquo;</span>
+                            {% endif %}
+                        </li>
+                        {% for page_index in page_range %}
+                            {% if page_index == page_of_articles.number %}
+                                <li class="active"><span>{{ page_index}}</span></li>
+                            {% else %}
+                                {% if page_index == '...' %}
+                                    <li><span>{{page_index}}</span></li>
+                                {% else %}
+                                     <li><a href="?page={{ page_index }}">{{ page_index}}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <li>
+                            {% if page_of_articles.has_next %}
+                            <a href="?page={{ page_of_articles.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                            {% else %}
+                                <span aria-hidden="true">&raquo;</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </nav>
+                <!-- END 页码 -->
+                
+            </div>
+            <div class="col-xs-6 col-md-4">
+                <!-- type categories -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">Blog Categories</div>
+                    <div class="panel-body">
+                        <ul class="article_type">
+                            {% for type in article_types %}
+                            <li>
+                                <a href="{% url 'article_with_type' type.pk %}">
+                                    {{ type.type_name }} ({{type.article_count}})
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- END type categories -->
+                <!-- date categories -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">Date Categories</div>
+                    <div class="panel-body">
+                        <ul class="article_date">
+                            {% for article_date,article_count in article_dates.items %}
+                            <li>
+                                <a href="{% url 'article_with_date' article_date.year article_date.month %}">
+                                    {{ article_date| date:"Y-m" }} ({{article_count}})
+                                </a>
+                            </li>
+                            {% empty %}
+                            <li></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- END date categories -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End ARTILCE-LIST -->
+{% endblock %}
+<!-- END content -->
