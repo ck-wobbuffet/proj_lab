@@ -80,18 +80,8 @@ WSGI_APPLICATION = 'proj_lab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 's2ac_db',
-        'USER': 'ck',
-        'PASSWORD': 'hhxxttxs',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-'''
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
