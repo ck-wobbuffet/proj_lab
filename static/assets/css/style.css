@@ -1112,7 +1112,7 @@ section {
 .hot-data .featured h3 {
   color: #444;
   background: #ffc107;
-  font-weight: bold;
+  font-weight: bold; 
 }
 
 .hot-data .featured .btn-buy {
